@@ -1,0 +1,59 @@
+version: '3.7'
+services:
+    ssh:
+        image: ktran9891/env_ulissi   # replace this with your config repo
+            deploy:
+                placement:
+                    constraints:
+                      - node.hostname == lambda-quad-3990-2080  # pick your computer
+                labels:
+                  - "traefik.enable=true"
+                  - "traefik.http.routers.zulissi_ssh.rule=Host(`zulissi.zulissi.duckdns.org`)"
+                  - "traefik.http.routers.zulissi_ssh.entrypoints=ssh"
+                  - "traefik.http.services.zulissi_ssh.loadbalancer.server.port=22"
+                resources:
+                    limits:
+                        cpus: '4'
+                        memory: 500M
+            volumes:
+              - ktran-home:/home/ktran      # replace `ktran` with your volume
+            ports:
+              - target: 22
+                published: 2223     # pick your ssh port, tell Zack (will work automatically when servers move to Doherty)
+                protocol: tcp
+                mode: host
+
+  jupyter:
+      image: ktran9891/env_ulissi       # replace this with your repo
+          deploy:
+              placement:
+                  constraints:
+                    - node.hostname == lambda-quad-3990-2080    # pick your computer
+              labels:
+                  - "traefik.enable=true"
+                  - "traefik.http.routers.zulissi_jupyter.rule=Host(`ktran.zulissi.duckdns.org`)"   # replace first `zulissi` in the `Host` argument  with the subdomain you want
+                  - "traefik.http.routers.zulissi_jupyter.entrypoints=jupyter"
+                  - "traefik.http.services.zulissi_jupyter.loadbalancer.server.port=8888"
+              resources:
+                  reservations:
+                      cpus: '16'
+                      memory: 8G
+          volumes:
+            - ktran-home:/home/ktran # replace ktran with your volume
+          environment:
+              OMP_NUM_THREADS: 1 # make sure we only use 1 thread/process
+              NUMEXPR_NUM_THREADS: 1 # make sure we only use 1 thread/process
+              MKL_DEBUG_CPU_TYPE: 5 # make random MKL calls faster on AMD cpus
+              JUPYTER_ENABLE_LAB: 'no' # yes if you want jupyterlab
+              NB_USER: ktran
+              NB_UID: 1001
+          shm_size: 1G # this is helpful to increase for parallel workers in pytorch
+          networks:
+            - traefik-public
+
+volumes:
+    ktran-home:
+
+networks:
+    traefik-public:
+        external: true
