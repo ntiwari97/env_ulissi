@@ -34,7 +34,7 @@ RUN git clone https://github.com/vim/vim.git /home/$USERNAME/vim
 RUN apt build-dep vim -y
 RUN cd /home/$USERNAME/vim/ && ./configure --enable-gui=auto --enable-gtk2-check --with-x
 COPY .vimrc /home/$USERNAME/.vimrc
-RUN vim -E -u NONE -S /home/$USERNAME/.vimrc +qall
+RUN vim +PluginInstall +qall
 
 EXPOSE 22
 CMD ["/usr/sbin/sshd", "-D"]
