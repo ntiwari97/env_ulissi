@@ -1,3 +1,5 @@
+# Go full vim
+set -o vi
 
 # Double-tapping tab now lists all appropriate files
 bind TAB:menu-complete
