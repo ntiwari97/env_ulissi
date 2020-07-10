@@ -56,6 +56,13 @@ RUN conda config --prepend channels conda-forge
 RUN conda install numpy scipy pandas seaborn jupyter tqdm flake8
 RUN conda clean -ity
 
-
+# Open port to enable portainer
 EXPOSE 22
+
+# Enable password-less ssh
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY default_authorized_keys /usr/local/etc
+RUN chmod +x /usr/local/bin/entrypoint.sh
+ENTRYPOINT ["runuser", "-l", "ktran", "/usr/local/bin/entrypoint.sh"]
+
 CMD ["/usr/sbin/sshd", "-D"]
