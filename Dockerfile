@@ -64,5 +64,4 @@ COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 COPY default_authorized_keys /usr/local/etc
 RUN chmod +x /usr/local/bin/entrypoint.sh
 ENTRYPOINT ["runuser", "-l", "ktran", "/usr/local/bin/entrypoint.sh"]
-
-CMD ["/usr/sbin/sshd", "-D"]
+ENTRYPOINT ["/bin/bash", "-c", "runuser", "-l", "ktran", "/usr/local/bin/entrypoint.sh; /usr/sbin/sshd -D"]
