@@ -26,32 +26,29 @@ RUN echo $USERNAME:$USERNAME | chpasswd
 
 # Personal configurations
 COPY bashrc_additions.sh .
-RUN cat bashrc_additions.sh >> ~/.bashrc
+RUN cat bashrc_additions.sh >> /home/$USERNAME/.bashrc
 RUN rm bashrc_additions.sh
 
 # Personal VIM installation
 RUN apt build-dep vim -y
-RUN git clone https://github.com/vim/vim.git $HOME/vim
-RUN cd $HOME/vim/ && ./configure --enable-gui=auto --enable-gtk2-check --with-x --enable-python3interp
-RUN cd $HOME/vim && make && make install
+RUN git clone https://github.com/vim/vim.git /home/$USERNAME/vim
+RUN cd /home/$USERNAME/vim/ && ./configure --enable-gui=auto --enable-gtk2-check --with-x --enable-python3interp
+RUN cd /home/$USERNAME/vim && make && make install
 
 # Configure VIM
-RUN git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-COPY vimrc .
-RUN mv vimrc ~/.vimrc
+RUN git clone https://github.com/VundleVim/Vundle.vim.git /home/$USERNAME/.vim/bundle/Vundle.vim
+COPY .vimrc /home/$USERNAME/.vimrc
 RUN /usr/local/bin/vim +PluginInstall +qall
-#COPY deus.vim .
-#RUN mkdir ~/.vim/colors && mv deus.vim ~/.vim/colors
-RUN echo "colors deus" >> ~/.vimrc
-RUN echo "set t_Co=256" >> ~/.vimrc
-COPY flake8 .
-RUN mkdir -p ~/.config && mv flake8 ~/.config/flake8
+RUN echo "colors deus" >> /home/$USERNAME/.vimrc
+RUN echo "set t_Co=256" >> /home/$USERNAME/.vimrc
+RUN mkdir -p /home/$USERNAME/.config
+COPY flake8 /home/$USERNAME/.config/
 
 # Install vanilla Python packages
-RUN wget https://repo.continuum.io/miniconda/Miniconda3-4.7.12-Linux-x86_64.sh --directory-prefix=$HOME
-RUN /bin/bash $HOME/Miniconda3-4.7.12-Linux-x86_64.sh -bp /miniconda3
-RUN rm $HOME/Miniconda3-4.7.12-Linux-x86_64.sh
-ENV PATH /miniconda3/bin:$PATH
+RUN wget https://repo.continuum.io/miniconda/Miniconda3-4.7.12-Linux-x86_64.sh
+RUN /bin/bash Miniconda3-4.7.12-Linux-x86_64.sh -bp /home/$USERNAME/miniconda3
+RUN rm /home/$USERNAME/Miniconda3-4.7.12-Linux-x86_64.sh
+ENV PATH /home/$USERNAME/miniconda3/bin:$PATH
 RUN conda config --prepend channels conda-forge
 RUN conda install numpy scipy pandas seaborn jupyter tqdm flake8
 RUN conda clean -ity
