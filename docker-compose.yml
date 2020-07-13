@@ -6,20 +6,15 @@ services:
             placement:
                 constraints:
                   - node.hostname == lambda-quad-3990-2080  # pick your computer
-            labels:
-              - "traefik.enable=true"
-              - "traefik.http.routers.zulissi_ssh.rule=Host(`zulissi.zulissi.duckdns.org`)"
-              - "traefik.http.routers.zulissi_ssh.entrypoints=ssh"
-              - "traefik.http.services.zulissi_ssh.loadbalancer.server.port=22"
             resources:
                 limits:
                     cpus: '4'
                     memory: 500M
         volumes:
-          - ktran-home:/home/ktran      # replace `ktran` with your volume
+          - ktran-home:/home/ktran      # pick your volumes
         ports:
           - target: 22
-            published: 2223     # pick your ssh port, tell Zack (will work automatically when servers move to Doherty)
+            published: 2223     # pick your ssh port
             protocol: tcp
             mode: host
 
@@ -29,11 +24,6 @@ services:
             placement:
                 constraints:
                   - node.hostname == lambda-quad-3990-2080    # pick your computer
-            labels:
-                - "traefik.enable=true"
-                - "traefik.http.routers.zulissi_jupyter.rule=Host(`ktran.zulissi.duckdns.org`)"   # replace first `zulissi` in the `Host` argument  with the subdomain you want
-                - "traefik.http.routers.zulissi_jupyter.entrypoints=jupyter"
-                - "traefik.http.services.zulissi_jupyter.loadbalancer.server.port=8888"
             resources:
                 reservations:
                     cpus: '16'
@@ -48,12 +38,6 @@ services:
             NB_USER: ktran
             NB_UID: 1001
         shm_size: 1G # this is helpful to increase for parallel workers in pytorch
-        networks:
-          - traefik-public
 
 volumes:
     ktran-home:
-
-networks:
-    traefik-public:
-        external: true
