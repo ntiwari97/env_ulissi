@@ -47,7 +47,7 @@ COPY flake8 /home/$USERNAME/.config/
 # Install vanilla Python packages
 RUN wget https://repo.continuum.io/miniconda/Miniconda3-4.7.12-Linux-x86_64.sh
 RUN /bin/bash Miniconda3-4.7.12-Linux-x86_64.sh -bp /home/$USERNAME/miniconda3
-RUN rm /home/$USERNAME/Miniconda3-4.7.12-Linux-x86_64.sh
+RUN rm Miniconda3-4.7.12-Linux-x86_64.sh
 ENV PATH /home/$USERNAME/miniconda3/bin:$PATH
 RUN conda config --prepend channels conda-forge
 RUN conda install numpy scipy pandas seaborn jupyter tqdm flake8
