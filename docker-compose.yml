@@ -32,16 +32,13 @@ services:
             - ktran-home:/home/volume  # use your own username here
         ports:
             - target: 8888
-              published: 8889   # Pick your port
+              published: 8889   # Pick your Jupyter port
               protocol: tcp
-              mode: host
+              mode: ingress
         environment:
             OMP_NUM_THREADS: 1          # make sure we only use 1 thread/process
             NUMEXPR_NUM_THREADS: 1      # make sure we only use 1 thread/process
             MKL_DEBUG_CPU_TYPE: 5       # make random MKL calls faster on AMD cpus
-            JUPYTER_ENABLE_LAB: 'no'    # yes if you want jupyterlab
-            NB_USER: ktran              # change to your username
-            NB_UID: 1001                # change to your user ID?
         shm_size: 1G                    # this is helpful to increase for parallel workers in pytorch
 
 volumes:
