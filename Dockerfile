@@ -14,8 +14,10 @@ RUN apt-get install -y nano git vim build-essential curl wget
 # SSH configuration to enable swarming
 RUN mkdir /var/run/sshd
 RUN sed -i "s/.*PasswordAuthentication.*/PasswordAuthentication no/g" /etc/ssh/sshd_config
+
 # SSH login fix. Otherwise user is kicked off after login
 RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+
 # Other configurations required for swarming
 ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
@@ -23,6 +25,8 @@ RUN echo "export VISIBLE=now" >> /etc/profile
 # Define username & environment
 RUN useradd -rm -d /home/$USERNAME -s /bin/bash -g root -G sudo -u 1000 $USERNAME
 RUN echo $USERNAME:$USERNAME | chpasswd
+
+########## Begin user-specific configurations ##########
 
 # Personal configurations
 COPY bashrc_additions.sh .
@@ -54,6 +58,8 @@ RUN conda config --prepend channels conda-forge
 RUN conda install numpy scipy pandas seaborn jupyter tqdm flake8
 RUN conda clean -ity
 RUN echo "export PATH=\"/home/${USERNAME}/miniconda3/bin:$PATH\"" >> /home/$USERNAME/.bashrc
+
+########## End user-specific configurations ##########
 
 # Make the folder to mount to
 RUN mkdir -p /home/volume
