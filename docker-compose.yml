@@ -1,11 +1,11 @@
 version: '3.7'
 services:
     ssh:
-        image: ktran9891/env_ulissi   # replace this with your config repo
+        image: ktran9891/env_ulissi:latest      # replace this with your config repo
         deploy:
             placement:
                 constraints:
-                  - node.hostname == lambda-quad-3990-2080  # pick your computer
+                    - node.hostname == lambda-quad-3990-2080  # pick your computer
             resources:
                 limits:
                     cpus: '4'
@@ -13,31 +13,36 @@ services:
         volumes:
           - ktran-home:/home/volume      # use your own username here
         ports:
-          - target: 22
-            published: 2223     # pick your ssh port
-            protocol: tcp
-            mode: host
+            - target: 22
+              published: 2223     # pick your ssh port
+              protocol: tcp
+              mode: host
 
     jupyter:
-        image: ktran9891/env_ulissi       # replace this with your repo
+        image: ktran9891/env_ulissi:jupyter     # replace this with your repo
         deploy:
             placement:
                 constraints:
-                  - node.hostname == lambda-quad-3990-2080    # pick your computer
+                    - node.hostname == lambda-quad-3990-2080    # pick your computer
             resources:
-                reservations:
+                limits:
                     cpus: '16'
                     memory: 8G
         volumes:
-          - ktran-home:/home/volume  # use your own username here
+            - ktran-home:/home/volume  # use your own username here
+        ports:
+            - target: 8888
+              published: 8889   # Pick your port
+              protocol: tcp
+              mode: host
         environment:
-            OMP_NUM_THREADS: 1 # make sure we only use 1 thread/process
-            NUMEXPR_NUM_THREADS: 1 # make sure we only use 1 thread/process
-            MKL_DEBUG_CPU_TYPE: 5 # make random MKL calls faster on AMD cpus
-            JUPYTER_ENABLE_LAB: 'no' # yes if you want jupyterlab
-            NB_USER: ktran
-            NB_UID: 1001
-        shm_size: 1G # this is helpful to increase for parallel workers in pytorch
+            OMP_NUM_THREADS: 1          # make sure we only use 1 thread/process
+            NUMEXPR_NUM_THREADS: 1      # make sure we only use 1 thread/process
+            MKL_DEBUG_CPU_TYPE: 5       # make random MKL calls faster on AMD cpus
+            JUPYTER_ENABLE_LAB: 'no'    # yes if you want jupyterlab
+            NB_USER: ktran              # change to your username
+            NB_UID: 1001                # change to your user ID?
+        shm_size: 1G                    # this is helpful to increase for parallel workers in pytorch
 
 volumes:
     ktran-home:
