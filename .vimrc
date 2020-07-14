@@ -11,8 +11,10 @@ call vundle#end()                   " Put Vundle plugin commands before this
 filetype plugin indent on           " Finish of Vundling. Not sure what this does
 
 " Highlighting, tabs, etc.
-set background=dark                 " Change highlighting to be friendly with black screen
 syntax on                           " Enable syntax highlighting
+set background=dark                 " Change highlighting to be friendly with black screen
+silent! colors deus                 " Color scheme
+set t_Co=256                        " Set correct colors inside Docker image
 set number                          " Paired with above, this shows hybrid line number
 set tabstop=4                       " how many spaces to add when tabbing
 set softtabstop=4                   " I dunno, really. But it's consistent with tabstop

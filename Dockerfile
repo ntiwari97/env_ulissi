@@ -28,6 +28,7 @@ RUN echo $USERNAME:$USERNAME | chpasswd
 COPY bashrc_additions.sh .
 RUN cat bashrc_additions.sh >> /home/$USERNAME/.bashrc
 RUN rm bashrc_additions.sh
+RUN chown -R $USERNAME /home/$USERNAME/.bashrc
 
 # Personal VIM installation
 RUN apt build-dep vim -y
@@ -38,11 +39,11 @@ RUN cd /home/$USERNAME/vim && make && make install
 # Configure VIM
 RUN git clone https://github.com/VundleVim/Vundle.vim.git /home/$USERNAME/.vim/bundle/Vundle.vim
 COPY .vimrc /home/$USERNAME/.vimrc
-RUN /usr/local/bin/vim +PluginInstall +qall
-RUN echo "colors deus" >> /home/$USERNAME/.vimrc
-RUN echo "set t_Co=256" >> /home/$USERNAME/.vimrc
+RUN chown -R $USERNAME /home/$USERNAME/.vimrc /home/$USERNAME/.vim
+RUN su - ktran -c "vim +VimEnter +PluginInstall +qall"
 RUN mkdir -p /home/$USERNAME/.config
 COPY flake8 /home/$USERNAME/.config/
+RUN chown -R $USERNAME /home/$USERNAME/.config
 
 # Install vanilla Python packages
 RUN wget https://repo.continuum.io/miniconda/Miniconda3-4.7.12-Linux-x86_64.sh
@@ -52,11 +53,14 @@ ENV PATH /home/$USERNAME/miniconda3/bin:$PATH
 RUN conda config --prepend channels conda-forge
 RUN conda install numpy scipy pandas seaborn jupyter tqdm flake8
 RUN conda clean -ity
+RUN echo "export PATH=\"/home/${USERNAME}/miniconda3/bin:$PATH\"" >> /home/$USERNAME/.bashrc
 
-# Open port to enable portainer
-EXPOSE 22
+# Make the folder to mount to
+RUN mkdir -p /home/volume
+RUN echo "cd /home/volume" >> /home/$USERNAME/.bashrc
 
 # Enable password-less ssh
+EXPOSE 22
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 COPY default_authorized_keys /usr/local/etc
 RUN chmod +x /usr/local/bin/entrypoint.sh

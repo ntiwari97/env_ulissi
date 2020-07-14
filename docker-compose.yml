@@ -11,7 +11,7 @@ services:
                     cpus: '4'
                     memory: 500M
         volumes:
-          - ktran-home:/home/ktran      # pick your volumes
+          - ktran-home:/home/volume      # use your own username here
         ports:
           - target: 22
             published: 2223     # pick your ssh port
@@ -29,7 +29,7 @@ services:
                     cpus: '16'
                     memory: 8G
         volumes:
-          - ktran-home:/home/ktran # replace ktran with your volume
+          - ktran-home:/home/volume  # use your own username here
         environment:
             OMP_NUM_THREADS: 1 # make sure we only use 1 thread/process
             NUMEXPR_NUM_THREADS: 1 # make sure we only use 1 thread/process
