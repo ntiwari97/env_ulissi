@@ -1,4 +1,5 @@
 FROM ktran9891/env_ulissi:latest
+ARG USERNAME=ktran
 
 
 # Install Jupyter
@@ -6,23 +7,20 @@ RUN conda install jupyter
 
 ########## Begin user-specific configurations ##########
 
-# Switch to user so home directories etc. behave as we expect
-USER $USERNAME
-
 # Jupyter extension manager
 RUN conda install jupyter_nbextensions_configurator
+RUN su - $USERNAME bash -c "source /home/ktran/miniconda3/bin/activate && jupyter nbextensions_configurator enable"
 
 # Vim bindings for Jupyter
-RUN mkdir -p $(jupyter --data-dir)/nbextensions
-RUN git clone https://github.com/lambdalisue/jupyter-vim-binding $(jupyter --data-dir)/nbextensions/vim_binding
-RUN jupyter nbextension enable vim_binding/vim_binding
+ARG JUPYTER_DIR=/home/$USERNAME/.local/share/jupyter
+RUN mkdir -p $JUPYTER_DIR/nbextensions
+RUN git clone https://github.com/lambdalisue/jupyter-vim-binding $JUPYTER_DIR/nbextensions/vim_binding
 
 # Jupyter theme
 RUN pip install jupyterthemes
-RUN jt -t oceans16
 
-# Switch back to root for proper control
-USER root
+# Let user modify files for configuration during runtime
+RUN chown -R $USERNAME $JUPYTER_DIR
 
 ########## End user-specific configurations ##########
 
