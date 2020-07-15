@@ -16,4 +16,4 @@ jupyter nbextension enable vim_binding/vim_binding
 ########## End user-specific configurations ##########
 
 # Launch Jupyter
-jupyter notebook --no-browser --ip=0.0.0.0
+jupyter notebook --config=$(jupyter --config-dir)/jupyter_notebook_config.json --no-browser --ip=0.0.0.0
