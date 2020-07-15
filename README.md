@@ -21,6 +21,7 @@ but you are welcome to try other things!
 7. Update the [`docker-compose.yml`](./docker-compose.yml) file by replacing the corresponding contents on each line
     * The `services.ssh.image` argument should point to the image you built from the root [`Dockerfile`](./Dockerfile) in this repository.
     * The `services.ssh.ports.published` argument should be populated with the ssh port number Zack reserved for you.
+    * The `services.jupyter.image` argument should point to the image you built from the Jupyter [`Dockerfile`](./jupyter/Dockerfile) in this repository.
     * The `services.jupyter.ports.published` argument should be populated with the Jupyter port number Zack reserved for you.
 8. Start your stack
     * Go to [Portainer](http://laikapack.cheme.cmu.edu:9000)
