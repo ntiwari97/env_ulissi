@@ -27,6 +27,9 @@ RUN git clone https://github.com/lambdalisue/jupyter-vim-binding $JUPYTER_DIR/nb
 # Jupyter theme
 RUN pip install jupyterthemes
 
+# Only the development version of ipycache works right now
+RUN pip install git+https://github.com/rossant/ipycache.git
+
 # Let user modify files for configuration during runtime
 RUN chown -R $USERNAME $JUPYTER_DIR
 
