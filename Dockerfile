@@ -55,7 +55,7 @@ RUN /bin/bash Miniconda3-4.7.12-Linux-x86_64.sh -bp /home/$USERNAME/miniconda3
 RUN rm Miniconda3-4.7.12-Linux-x86_64.sh
 ENV PATH /home/$USERNAME/miniconda3/bin:$PATH
 RUN conda config --prepend channels conda-forge
-RUN conda install numpy scipy pandas seaborn jupyter tqdm flake8
+RUN conda install numpy scipy pandas seaborn tqdm flake8
 RUN conda clean -ity
 RUN echo "export PATH=\"/home/${USERNAME}/miniconda3/bin:$PATH\"" >> /home/$USERNAME/.bashrc
 
