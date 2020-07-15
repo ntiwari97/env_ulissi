@@ -15,9 +15,9 @@ but you are welcome to try other things!
 4. Update the [`jupyter/Dockerfile`](./jupyter/Dockerfile) the same way you modified the root `Dockerfile`.
     * Note the [`start-notebook.sh`](./jupyter/start-notebook.sh) script. You may also need to modify/remove the configurable settings in that script, depending on how you configure the image.
 5. Add your ssh public key to `default_authorized_keys`
-  * If you're unsure what your public key is, make one with `ssh-keygen -t rsa -b 4096`, then copy the line in your `~/.ssh/id_rsa.pub` to replace the line in `default_authorized_keys`
+    * If you're unsure what your public key is, make one with `ssh-keygen -t rsa -b 4096`, then copy the line in your `~/.ssh/id_rsa.pub` to replace the line in `default_authorized_keys`
 6. Build and push your two images to [DockerHub](https://hub.docker.com/)
-   * If you're unsure how to build and push Docker images, ask fellow group members and/or follow tutorials on [building](https://docs.docker.com/get-started/part2/) and [pushing](https://docs.docker.com/get-started/part3/) Docker images.
+    * If you're unsure how to build and push Docker images, ask fellow group members and/or follow tutorials on [building](https://docs.docker.com/get-started/part2/) and [pushing](https://docs.docker.com/get-started/part3/) Docker images.
 7. Update the [`docker-compose.yml`](./docker-compose.yml) file by replacing the corresponding contents on each line
     * The `services.ssh.image` argument should point to the image you built from the root [`Dockerfile`](./Dockerfile) in this repository.
     * The `services.ssh.ports.published` argument should be populated with the ssh port number Zack reserved for you.
