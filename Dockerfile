@@ -28,12 +28,6 @@ RUN echo $USERNAME:$USERNAME | chpasswd
 
 ########## Begin user-specific configurations ##########
 
-# Personal configurations
-COPY bashrc_additions.sh .
-RUN cat bashrc_additions.sh >> /home/$USERNAME/.bashrc
-RUN rm bashrc_additions.sh
-RUN chown -R $USERNAME /home/$USERNAME/.bashrc
-
 # Install vanilla Python packages
 RUN wget https://repo.continuum.io/miniconda/Miniconda3-4.7.12-Linux-x86_64.sh
 RUN /bin/bash Miniconda3-4.7.12-Linux-x86_64.sh -bp /home/$USERNAME/miniconda3
@@ -43,6 +37,12 @@ RUN conda config --prepend channels conda-forge
 RUN conda install numpy scipy pandas seaborn tqdm flake8
 RUN conda clean -ity
 RUN echo "export PATH=\"/home/${USERNAME}/miniconda3/bin:$PATH\"" >> /home/$USERNAME/.bashrc
+
+# Personal configurations
+COPY bashrc_additions.sh .
+RUN cat bashrc_additions.sh >> /home/$USERNAME/.bashrc
+RUN rm bashrc_additions.sh
+RUN chown -R $USERNAME /home/$USERNAME/.bashrc
 
 # Configure VIM
 RUN git clone https://github.com/VundleVim/Vundle.vim.git /home/$USERNAME/.vim/bundle/Vundle.vim
