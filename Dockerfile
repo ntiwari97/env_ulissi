@@ -1,5 +1,5 @@
 FROM nvcr.io/nvidia/pytorch:20.02-py3
-ARG USERNAME=ktran
+ARG USERNAME=ntiwari
 
 
 # Set up a cleaner install of apt-get so that we can `apt build-dep` later
