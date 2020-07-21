@@ -1,7 +1,7 @@
 version: '3.7'
 services:
     ssh:
-        image: ktran9891/env_ulissi:latest      # replace this with your config repo
+        image: ntiwari2/env_ulissi:latest      # replace this with your config repo
         deploy:
             placement:
                 constraints:
@@ -11,15 +11,15 @@ services:
                     cpus: '4'
                     memory: 500M
         volumes:
-          - ktran-home:/home/volume      # use your own username here
+          - ntiwari-home:/home/volume      # use your own username here
         ports:
             - target: 22
-              published: 2223     # pick your ssh port
+              published: 2225     # pick your ssh port
               protocol: tcp
               mode: host
 
     jupyter:
-        image: ktran9891/env_ulissi:jupyter     # replace this with your repo
+        image: ntiwari2/env_ulissi:jupyter     # replace this with your repo
         deploy:
             placement:
                 constraints:
@@ -29,10 +29,10 @@ services:
                     cpus: '16'
                     memory: 8G
         volumes:
-            - ktran-home:/home/volume  # use your own username here
+            - ntiwari-home:/home/volume  # use your own username here
         ports:
             - target: 8888
-              published: 8889   # Pick your Jupyter port
+              published: 8890   # Pick your Jupyter port
               protocol: tcp
               mode: ingress
         environment:
@@ -42,4 +42,4 @@ services:
         shm_size: 1G                    # this is helpful to increase for parallel workers in pytorch
 
 volumes:
-    ktran-home:
+    ntiwari-home:
