@@ -8,8 +8,8 @@ services:
                     - node.hostname == lambda-quad-3990-2080  # pick your computer
             resources:
                 limits:
-                    cpus: '4'
-                    memory: 4G
+                    cpus: '64'
+                    memory: 64G
         volumes:
           - ntiwari-home:/home/volume      # use your own username here
           - type: tmpfs
