@@ -12,6 +12,10 @@ services:
                     memory: 4G
         volumes:
           - ntiwari-home:/home/volume      # use your own username here
+          - type: tmpfs
+            target: /dev/shm
+            tmpfs:
+              size: 16000000000 # ~16gb
         ports:
             - target: 22
               published: 2225     # pick your ssh port
