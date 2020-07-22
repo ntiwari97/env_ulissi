@@ -9,7 +9,7 @@ services:
             resources:
                 limits:
                     cpus: '4'
-                    memory: 500M
+                    memory: 4G
         volumes:
           - ntiwari-home:/home/volume      # use your own username here
         ports:
