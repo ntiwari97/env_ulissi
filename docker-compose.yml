@@ -8,7 +8,7 @@ services:
                     - node.hostname == lambda-quad-3990-2080  # pick your computer
             resources:
                 limits:
-                    cpus: '64'
+                    cpus: '4'
                     memory: 4G
         volumes:
           - ntiwari-home:/home/volume      # use your own username here
